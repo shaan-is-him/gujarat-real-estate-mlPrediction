@@ -57,4 +57,4 @@ Features like `totalSellingAmount`, `totalUnits`, and `avgUnits` have very low i
 ## Live Demo
 **Live Web App**: [Gujarat Property Price Predictor](https://your-streamlit-link.streamlit.app)  
 
-![Demo Screenshot](Images/app_screenshot.png)  
+![Demo Screenshot](Images/Screenshot 2026-07-19 144322.png)  
