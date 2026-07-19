@@ -11,24 +11,27 @@ st.markdown("**Predict average cost per sq.ft. using My trained model**")
 @st.cache_resource
 def load_model():
     try:
+        # Multiple possible paths for robustness
         model_paths = [
             'gujarat_rera_gb_model.pkl',
-            'models/gujarat_rera_gb_model.pkl',
-            './gujarat_rera_gb_model.pkl'
+            './gujarat_rera_gb_model.pkl',
+            'models/gujarat_rera_gb_model.pkl'
         ]
+        
+        model = None
         for path in model_paths:
             if os.path.exists(path):
                 model = joblib.load(path)
+                st.success(f"✅ Model loaded from: {path}")
                 break
-        else:
-            st.error("Model file not found!")
+                
+        if model is None:
+            st.error("❌ Model file 'gujarat_rera_gb_model.pkl' not found!")
             st.stop()
-            
+
         encoder = joblib.load('categorical_ordinal_encoder.pkl')
+        
         return model, encoder
-    except Exception as e:
-        st.error(f"Error loading model: {str(e)}")
-        st.stop()
         
 model, encoder = load_model()
 
