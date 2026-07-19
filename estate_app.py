@@ -5,46 +5,49 @@ import os
 import joblib
 
 st.set_page_config(page_title="Gujarat Property Price Predictor", layout="wide")
-st.title("Gujarat Real Estate Price Predictor")
-st.markdown("**Predict average cost per sq.ft. using My trained model**")
+
+st.title("🏠 Gujarat Real Estate Price Predictor")
+st.markdown("**Predict average cost per sq.ft. using trained model**")
 
 @st.cache_resource
 def load_model():
     try:
-        # Multiple possible paths for robustness
-        model_paths = [
-            'gujarat_rera_gb_model.pkl',
+        possible_paths = [
+            'gujarat_rera_gb_model.pkl',           
             './gujarat_rera_gb_model.pkl',
-            'models/gujarat_rera_gb_model.pkl'
+            'models/gujarat_rera_gb_model.pkl'     #
         ]
         
         model = None
-        for path in model_paths:
+        for path in possible_paths:
             if os.path.exists(path):
                 model = joblib.load(path)
-                st.success(f"✅ Model loaded from: {path}")
+                st.info(f"✅ Model loaded successfully from: {path}")
                 break
                 
         if model is None:
-            st.error("❌ Model file 'gujarat_rera_gb_model.pkl' not found!")
+            st.error("❌ Could not find gujarat_rera_gb_model.pkl")
             st.stop()
 
+        # Load encoder
         encoder = joblib.load('categorical_ordinal_encoder.pkl')
+        st.info("✅ Encoder loaded successfully")
         
         return model, encoder
+
     except Exception as e:
-        st.error(f"❌ Error loading model: {str(e)}")
-        st.info("Make sure both .pkl files are in the root folder of your repository.")
+        st.error(f"Error loading model: {str(e)}")
         st.stop()
 
 model, encoder = load_model()
 
-# Get exact feature names in correct order from training
+# Get feature names
 feature_names = model.feature_names_in_ if hasattr(model, 'feature_names_in_') else None
 
 if feature_names is None:
-    st.error("Model does not have feature names. Please retrain with newer scikit-learn.")
+    st.error("Model does not have feature names.")
     st.stop()
+
 
 col1, col2 = st.columns(2)
 
@@ -56,51 +59,20 @@ with col1:
 
 with col2:
     totalUnits = st.number_input("Total Units", min_value=1, value=100)
-    totalAreaOfLand = st.number_input("Total Land Area (sq.ft)", min_value=100.0, value=50000.0,step=1.0)
+    totalAreaOfLand = st.number_input("Total Land Area (sq.ft)", min_value=100.0, value=50000.0)
     totalLandCost = st.number_input("Total Land Cost (₹ Crores)", min_value=0.0, value=5.0)
     totalEstimatedCost = st.number_input("Total Estimated Cost (₹ Crores)", min_value=0.0, value=15.0)
     totalSquareFootBuild = st.number_input("Total Built-up Area (sq.ft)", min_value=100.0, value=80000.0)
     totalProjects = st.number_input("Total Projects", min_value=1, value=1)
 
-# other required fields
-totalCarpetArea_form3A = st.number_input("Total Carpet Area (sq.ft)", min_value=100.0, value=60000.0, )
-totalBuiltupArea_form3A = st.number_input("Total Built-up Area Form 3A (sq.ft)", min_value=100.0, value=80000.0,step=1.0)
+totalCarpetArea_form3A = st.number_input("Total Carpet Area (sq.ft)", min_value=100.0, value=60000.0)
+totalBuiltupArea_form3A = st.number_input("Total Built-up Area Form 3A (sq.ft)", min_value=100.0, value=80000.0)
 totalDevelopCost = st.number_input("Total Development Cost (₹ Crores)", min_value=0.0, value=12.0)
 totalPayableAmountGovernment = st.number_input("Total Payable to Govt (₹ Crores)", min_value=0.0, value=1.5)
 totalSellingAmount = st.number_input("Total Selling Amount (₹ Crores)", min_value=0.0, value=25.0)
 
-if st.button("Predict Price per Sq.Ft", type="primary", ):
-    input_dict = {
-        'distName': [distName],
-        'projectType': [projectType],
-        'promoterType': [promoterType],
-        'underRedevelopment': [underRedevelopment],
-        'tpo_code': ["Unknown"],
-
-        'totalUnits': [totalUnits],
-        'totalAreaOfLand': [totalAreaOfLand],
-        'totalLandCost': [totalLandCost],
-        'totalEstimatedCost': [totalEstimatedCost],
-        'totalSquareFootBuild': [totalSquareFootBuild],
-        'totalProjects': [totalProjects],
-        'totalCarpetArea_form3A': [totalCarpetArea_form3A],
-        'totalBuiltupArea_form3A': [totalBuiltupArea_form3A],
-        'totalDevelopCost': [totalDevelopCost],
-        'totalPayableAmountGovernment': [totalPayableAmountGovernment],
-        'totalSellingAmount': [totalSellingAmount],
-
-
-        'AvgAreaOfLand': [totalAreaOfLand / totalProjects],
-        'AvgSquareFootBuild': [totalSquareFootBuild / totalUnits if totalUnits > 0 else 0],
-        'avgUnits': [totalUnits],
-        'EndProjectMonth': [6],
-        'EndProjectYear': [2026],
-        'avgEstimatedCost_AllProjects': [totalEstimatedCost / totalProjects],
-        'startProjectYear': [2024],
-        'startProjectMonth': [1],
-        'project_duration_days': [730],
-        'project_duration_years': [2.0],
-    }
+if st.button("🔮 Predict Price per Sq.Ft", type="primary"):
+    input_dict = { ... }   # Keep your input_dict as it is
 
     input_df = pd.DataFrame(input_dict)
 
@@ -114,4 +86,4 @@ if st.button("Predict Price per Sq.Ft", type="primary", ):
 
     st.success(f"**Predicted Avg Cost: ₹{predicted_price:,.2f} per sq.ft**")
 
-st.caption("Built with Streamlit • And lots of Hardwork")
+st.caption("Built with Streamlit • and Hard Work")
