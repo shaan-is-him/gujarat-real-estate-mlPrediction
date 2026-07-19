@@ -32,7 +32,11 @@ def load_model():
         encoder = joblib.load('categorical_ordinal_encoder.pkl')
         
         return model, encoder
-        
+    except Exception as e:
+        st.error(f"❌ Error loading model: {str(e)}")
+        st.info("Make sure both .pkl files are in the root folder of your repository.")
+        st.stop()
+
 model, encoder = load_model()
 
 # Get exact feature names in correct order from training
