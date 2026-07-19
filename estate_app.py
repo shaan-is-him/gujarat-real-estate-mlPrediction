@@ -9,8 +9,8 @@ st.markdown("**Predict average cost per sq.ft. using My trained model**")
 
 @st.cache_resource
 def load_model():
-    model = joblib.load('gujarat_rera_gb_model.pkl')
-    encoder = joblib.load('categorical_ordinal_encoder.pkl')
+    model = joblib.load('models/gujarat_rera_gb_model.pkl')
+    encoder = joblib.load('models/categorical_ordinal_encoder.pkl')
     return model, encoder
 
 model, encoder = load_model()
