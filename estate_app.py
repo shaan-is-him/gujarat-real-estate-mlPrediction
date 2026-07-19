@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import os
 import joblib
 
 st.set_page_config(page_title="Gujarat Property Price Predictor", layout="wide")
@@ -9,10 +10,26 @@ st.markdown("**Predict average cost per sq.ft. using My trained model**")
 
 @st.cache_resource
 def load_model():
-    model = joblib.load('models/gujarat_rera_gb_model.pkl')
-    encoder = joblib.load('models/categorical_ordinal_encoder.pkl')
-    return model, encoder
-
+    try:
+        model_paths = [
+            'gujarat_rera_gb_model.pkl',
+            'models/gujarat_rera_gb_model.pkl',
+            './gujarat_rera_gb_model.pkl'
+        ]
+        for path in model_paths:
+            if os.path.exists(path):
+                model = joblib.load(path)
+                break
+        else:
+            st.error("Model file not found!")
+            st.stop()
+            
+        encoder = joblib.load('categorical_ordinal_encoder.pkl')
+        return model, encoder
+    except Exception as e:
+        st.error(f"Error loading model: {str(e)}")
+        st.stop()
+        
 model, encoder = load_model()
 
 # Get exact feature names in correct order from training
