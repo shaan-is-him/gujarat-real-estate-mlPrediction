@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import system as sys
+import sys
 import joblib
 
 st.set_page_config(page_title="Gujarat Property Price Predictor", layout="wide")
