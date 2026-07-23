@@ -9,19 +9,6 @@ st.set_page_config(page_title="Gujarat Property Price Predictor", layout="wide")
 st.title("Gujarat Real Estate Price Predictor")
 st.markdown("**Predict average cost per sq.ft. using My trained model**")
 
-# ================== DEBUG INFO ==================
-st.sidebar.header("🔍 Environment Debug")
-st.sidebar.write(f"**Python Version:** {sys.version.split()[0]}")
-st.sidebar.write(f"**scikit-learn Version:** {sklearn.__version__}")
-st.sidebar.write(f"**Joblib Version:** {joblib.__version__}")
-
-try:
-    import numpy as np
-    st.sidebar.write(f"**NumPy Version:** {np.__version__}")
-except:
-    st.sidebar.write("NumPy: Not found")
-# ===============================================
-
 @st.cache_resource
 def load_model():
     model = joblib.load('models/gujarat_rera_gb_model.joblib')
