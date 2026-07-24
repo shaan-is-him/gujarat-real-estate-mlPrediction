@@ -55,6 +55,6 @@ Features like `totalSellingAmount`, `totalUnits`, and `avgUnits` have very low i
 **Best Model**: Gradient Boosting Regressor with Log Transformation
 
 ## Live Demo
-**Live Web App**: [Gujarat Property Price Predictor](https://your-streamlit-link.streamlit.app)  
+**Live Web App**: [Gujarat Property Price Predictor](https://guj-estate-garvil.streamlit.app)  
 
 ![Demo Screenshot](images/estate_demo.png)  
